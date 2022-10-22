@@ -10,6 +10,33 @@ import defaultImg from "../images/room-1.jpeg";
 
 
 export default function ListRoom() {
+    const [appState, setAppState] = useState({
+		customer: null,
+	});
+
+	useEffect(() => {
+		axiosInstance.get('user/customer/').then((res) => {
+			const customerDetail = res.data;
+			setAppState({customer: customerDetail});
+			console.log(res.data);
+		});
+	}, [setAppState]);
+    
+	let bookingButton;
+
+    if(appState.customer != null) {
+        bookingButton = <Button
+        href="#"
+        color="primary"
+        variant="outlined"
+        component={NavLink}
+        to= ''>
+            Book Room
+        </Button>
+    } else {
+        bookingButton = null;
+    }
+
     return (
         <>
         <section className="single-room">
@@ -23,14 +50,7 @@ export default function ListRoom() {
         </div>
         </section>
         <section className="room-extras">
-        <Button
-			href="#"
-			color="primary"
-			variant="outlined"
-			component={NavLink}
-			to= ''>
-				Book Room
-			</Button>
+        {bookingButton}
         </section>
         </>
     );
